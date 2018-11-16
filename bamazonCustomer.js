@@ -45,12 +45,27 @@ var promptBuy = function() {
 			message: "What is the quantity that you would like to buy?"
 		}
 	]).then(function(answers) {
-		console.log(answers);
+		queryString="select * from products where ?";
+		connection.query(queryString,{ItemID: answers.id}, function(error, results, fields) {
+			//if there is not enough log insuficient quantity
+			if(parseFloat(answers.quantity)>results[0].Quantity) {
+				console.log("insufficient quantity");
+				connection.end();
+			}
+			//if there is enough update the database to reflect the transaction and log the total cost
+			else {
+				console.log("updating");
+				var newQ = results[0].Quantity - parseFloat(answers.quantity);
+				console.log(newQ);
+				queryString = ""
+				connection.end();
+			}
+		});
 	});
 
 }
-//if there is not enough log insuficient quantity
 
-//if there is enough update the database to reflect the transaction and log the total cost
+
+
 
 showProducts();
