@@ -54,10 +54,14 @@ var promptBuy = function() {
 			}
 			//if there is enough update the database to reflect the transaction and log the total cost
 			else {
-				console.log("updating");
 				var newQ = results[0].Quantity - parseFloat(answers.quantity);
-				console.log(newQ);
-				queryString = ""
+				var cost = answers.quantity * results[0].Price;
+				console.log("Upadated item quantity to " + newQ);
+				console.log("The total cost of this purchase is " + cost);
+				queryString = "update products set ? where ?";
+				connection.query(queryString, [{Quantity: newQ}, {ItemID: answers.id}], function(error, results, fields){
+
+				});
 				connection.end();
 			}
 		});
